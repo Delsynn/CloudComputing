@@ -1,0 +1,1001 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introductie</a></li><li class="chapter-item expanded affix "><a href="interpretatie.html">Interpretatie</a></li><li class="chapter-item expanded affix "><li class="part-title">CI/CD & Advanced GitOps</li><li class="chapter-item expanded "><a href="cicd/docker.html"><strong aria-hidden="true">1.</strong> Docker</a></li><li class="chapter-item expanded "><a href="cicd/deployment.html"><strong aria-hidden="true">2.</strong> Deployment</a></li><li class="chapter-item expanded "><a href="cicd/advanced.html"><strong aria-hidden="true">3.</strong> Advanced Gitops</a></li><li class="chapter-item expanded "><a href="cicd/kustomizeandhelm.html"><strong aria-hidden="true">4.</strong> Kustomize and Helm</a></li><li class="chapter-item expanded "><a href="cicd/argoimageupdater.html"><strong aria-hidden="true">5.</strong> Argo Image Updater</a></li><li class="chapter-item expanded affix "><li class="part-title">Autoscaling with Keda</li><li class="chapter-item expanded "><a href="keda/cronscaler.html"><strong aria-hidden="true">6.</strong> Cronscaler</a></li><li class="chapter-item expanded "><a href="keda/cpuscaler.html"><strong aria-hidden="true">7.</strong> Cpuscaler</a></li><li class="chapter-item expanded "><a href="keda/prometheus.html"><strong aria-hidden="true">8.</strong> Prometheus</a></li><li class="chapter-item expanded affix "><li class="part-title">Gateway API Spec</li><li class="chapter-item expanded "><a href="gateway/gateway.html"><strong aria-hidden="true">9.</strong> Gateway API Spec</a></li><li class="chapter-item expanded "><a href="gateway/loadbalancing.html"><strong aria-hidden="true">10.</strong> Load Balancing</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="keuzes-van-de-opdrachten"><a class="header" href="#keuzes-van-de-opdrachten">Keuzes van de opdrachten</a></h1>
+<p>Wij kozen voor de volgende opdrachten:</p>
+<ul>
+<li>
+<h2 id="major-assignment-cicd"><a class="header" href="#major-assignment-cicd">Major Assignment CI/CD</a></h2>
+<ul>
+<li>Github Actions (Testing and building pipelines)</li>
+<li>Three different environments (Main, Dev and QA)</li>
+<li>Argo Rollouts (Met Canary Deployment bij ons)</li>
+<li>ArgoCD syncs off our repository</li>
+</ul>
+</li>
+<li>
+<h2 id="autoscaling-with-keda"><a class="header" href="#autoscaling-with-keda">Autoscaling with Keda</a></h2>
+<ul>
+<li>Cronscaler</li>
+<li>CPU-scaler</li>
+<li>Scaling off metrics scraped by Prometheus</li>
+</ul>
+</li>
+<li>
+<h2 id="gateway-api-spec"><a class="header" href="#gateway-api-spec">Gateway API Spec</a></h2>
+<ul>
+<li>HTTP Route</li>
+<li>TCP Route/UDP Route</li>
+<li>Load Balancing</li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="interpretatie-van-de-opdrachten"><a class="header" href="#interpretatie-van-de-opdrachten">Interpretatie van de opdrachten</a></h1>
+<h2 id="cicd--advanced-gitops"><a class="header" href="#cicd--advanced-gitops">CI/CD &amp; Advanced GitOps</a></h2>
+<p>Wanneer we het hebben over CI/CD zijn er dus duidelijk twee delen die we moeten bespreken CI en CD, ik zal even uitleggen hoe deze in zijn werking gaan met de gekozen omgeving waar wij gebruik van maken.</p>
+<h3 id="ci"><a class="header" href="#ci">CI</a></h3>
+<p>Bij continous integration praten wij voornamelijk over het bouwen en testen van onze applicatie. Hier wordt in deze opdracht Github Actions voor gebruikt. Wij beginnen van zelf aangemaakte workflows (in de .github folder in onze repo) met daarin verschillende Github Actions die wij op onze applicatie (een website) gaan uitvoeren.</p>
+<p>Wij starten van Markdown files die wij via een Github action in onze workflow gaan ombouwen in een statische website. Deze action noemt MdBook en converteert simpele Markdown files in een statische website. Normaal gezien kan deze dan gepublished worden op een aparte branch genaamd gh-pages. Wij hebben dit echter wat anders gedaan.</p>
+<p>Wij starten dus ook van Markdown files, maar gaan hier dan eerst wat syntax testen op uitvoeren (testing pipeline), dan dus de MdBook action uitvoeren die deze files in een website omzetten (building pipeline) en de resulterende files, samen met een Dockerfile gebruiken om een Docker Image te maken van deze bestanden. In de Dockerfile staat dat wij Nginx gaan gebruiken als webserver en dat de files naar de correcte folder in Nginx moeten gekopieerd worden. Deze image wordt dan opgeladen naar mijn Docker Hub (We hebben gewoon eender wie zijn Docker Hub gekozen).</p>
+<p>Deze image kan dan gebruikt worden om te deployen op onze cluster, meer specifiek in ArgoCD.</p>
+<h3 id="cd"><a class="header" href="#cd">CD</a></h3>
+<p>Nu dat wij een applicatie hebben om te deployen willen we dat eventuele veranderingen meteen doorgevoerd worden zodat wij de deployment niet steeds moeten naar beneden halen om dan terug te moeten opzetten.</p>
+<p>Hier komt ArgoCD dan handig te pas, via een manifest (yaml file) van het type Application kan mijn een applicatie dus deployen in de ArgoCD omgeving. In deze manifest gaat men het path naar de repository intstellen waar al onze andere manifest files zich bevinden. Wat ArgoCD dan kan doen is deze repository monitoren en indien er veranderingen gebeuren aan deze manifest files gaat ArgoCD deze vanzelf syncen (indien auto-sync is ingesteld in de application yaml). </p>
+<p>Dit zorgt er nog niet voor dat onze container images worden geüpdate echter en hoewel dus dat ArgoCD updates aan onze deployment zal uitvoeren aan de hand van de manifests in onze repository gaat verandering aan de website dus niet zichtbaar zijn. Hier kunnen wij echter een module van ArgoCD voor gebruiken genaamd Image Updater. Via enkele annotaties in onze application manifest gaan wij de locatie van onze Image Registry (Docker hub) doorgeven aan deze Image Updater. Deze gaat dan de images in onze manifests vergelijken met de images op deze registry en indien Image Updater een nieuwere versie van de image ziet op Docker Hub zal hij deze &quot;pullen&quot; en zal het nieuwe containers opstarten met de nieuwere versie van onze image.</p>
+<p>In ons geval hebben 3 aparte workflows (1 per branch) en afhankelijk van op welke branch gepushed wordt zal er dus een image gemaakt worden met een aangepaste naam. De docker hub heeft dus 3 images namelijk sdo:latest, sdo:dev en sdo:qa.</p>
+<p>Image updater werkt echter enkel met Kustomize of Helm, wij hebben gebruikt gemaakt van Kustomize op de dev en qa branch en hier worden de images wel degelijk geüpdate via Image Updater. Op main gebruiken wij Helm en alhoewel er dus hashes gemaakt worden van de nieuwe image worden de containers niet geüpdate.</p>
+<h2 id="advanced-gitops"><a class="header" href="#advanced-gitops">Advanced GitOps</a></h2>
+<p>Voor advanced GitOps dacht dat wij spraken over het Argo Rollouts gedeelte van de opdracht. Nog een andere module van ArgoCD waarbij een &quot;rollout&quot; kan doen van de applicatie. Dit kan met een blue/green deployment of een canary deployment. </p>
+<ul>
+<li>Blue/green inhoudend dat wanneer er een nieuwe versie van de deployment is die zal actief gezet worden terwijl de oude naar beneden wordt gehaald.</li>
+<li>Canary inhoudend dat de deployment geleidelijk aan gebeurd waarbij een nieuwe deployment slechts een deel van de trafiek naar de applicatie krijgt (in ons geval dus een website) bijvoorbeeld 20%. Indien het dit aankan kan dan de deployment gepromoveerd worden naar bijvoorbeeld 40% en zo tot wij aan 100% geraken en dan de nieuwe versie van de applicatie de oude volledig kan overnemen.</li>
+</ul>
+<h2 id="renovatebot"><a class="header" href="#renovatebot">Renovatebot</a></h2>
+<p>Renovatebot is een automatische dependency update tool, deze kan images (in ons geval docker images) in onze manifest nakijken en checken of deze nog up-to-date zijn. Indien niet kan Renovatebot pull requests maken met de nodige updates aan deze dependancies. Bij ons gaat dit bijvoorbeeld over Nginx waarop de docker image van onze website gebouwd is. Alsook de versies van de Actions in onze workflows.</p>
+<h2 id="autoscaling-with-keda-1"><a class="header" href="#autoscaling-with-keda-1">Autoscaling with Keda</a></h2>
+<p>Keda is een autoscaler die pods kan scalen (meer pods aanmaken of pods verminderen van de applicatie) op basis van Kubernetes events. Keda kan bijvoorbeeld op basis van een cron schedule het aantal pods omhoog halen tijdens drukke periodes en naar beneden halen tijdens de kalmere uren.</p>
+<p>Maar het kan ook pods scalen op basis van metrics die hij uit de Kubernetes omgeving haalt. Een cpu scaler kan bijvoorbeeld aan de hand van metrics die Keda krijgt van de Kubernetes metrics server (die standaard bij de installatie van een Kubernetes omgeving zit) zien of er veel cpu wordt gebruikt in een pod en indien ja meer pods opstarten om de lading te verdelen.</p>
+<p>Nog een mogelijkheid is om een monitoring tool als Prometheus te installeren die metrics kan scrapen van de verschillende pods via bijvoorbeeld in ons geval een Nginx exporter. Dit kan gaan over http requests bijvoorbeeld, veel trafiek naar de pods. Keda kan dan aan de hand van deze gescrapte metrics meer pods opstarten om de toename in trafiek te verdelen.</p>
+<h2 id="gateway-api-spec-1"><a class="header" href="#gateway-api-spec-1">Gateway API Spec</a></h2>
+<p>Binnenkomde trafiek wordt in een standaard Kubernetes omgeving behandeld door een Ingress resource. 
+Ingress kan enkel omgaan met http en https trafiek. Met de Kubernetes Gateway API gaat men ook TCP en UDP trafiek kunnen routeren, men kan ook aan load-balancing doen. De Gateway API komt ook met security features die men niet krijgt met de standaard Ingress.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="docker--mdbook"><a class="header" href="#docker--mdbook">Docker &amp; MdBook</a></h1>
+<p>We beginnen bij het aanmaken van een docker image van onze website.
+Tijdens het werken aan de documentatie van andere opdrachten kwam ik op een video over het gebruik van een Github Action genaamd MdBook.</p>
+<p>Deze action maakt een statisch website uit uw markdown files, wat het aanmaken van een documentatie website enorm versimpeld.</p>
+<p>Hier zitten we dus al gedeeltelijk bij het gebruik van een workflow. 
+Bijvoorbeeld voor de main branch van onze repository hebben we de volgende workflow aangemaakt:</p>
+<pre><code>name: Build Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  
+
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v1
+        with:
+          mdbook-version: 'latest'
+          # mdbook-version: '0.4.10'
+
+      - run: mdbook build
+
+      - name: Docker login
+        env:
+          DOCKER_HUB_LOGIN: ${{ secrets.DOCKER_HUB_LOGIN }}
+          DOCKER_HUB_SECRET: ${{ secrets.DOCKER_HUB_SECRET }}
+        run: |
+          echo 'Docker login'
+          docker login -u $DOCKER_HUB_LOGIN -p $DOCKER_HUB_SECRET
+
+      - name: Build and push Docker image
+        run: |
+          echo 'Running build...'
+          docker build --no-cache ./book -t delsynn/sdo:latest
+          echo 'Pushing image...'
+          docker push delsynn/sdo:latest
+          echo 'Done !'
+
+</code></pre>
+<p>Zoals u kan zien maakt deze workflow gebruik van enkele Github Actions namelijk:</p>
+<ul>
+<li>De checkout action: deze gaat de repository kopiëren naar de workspace van de workflow en zal aan het einde van de workflow ook alles terug opkuisen.</li>
+<li>De mdbook action: deze maakt een statische website, zoals u dus ziet, van de markdown files die zich in de &quot;src&quot; folder bevinden in onze repository.</li>
+<li>En als laatste maken we twee stappen zelf aan waar we inloggen op docker, een image aanmaken van de resulterende files van de mdbook action en deze opladen op Michiel's Docker Hub.</li>
+</ul>
+<p>Nu hebben we een image op docker hub waarmee wij kunnen werken voor het deployen van onze website.</p>
+<p><img src="cicd/dockerhub.png" alt="dockerhub" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="actuele-deployment"><a class="header" href="#actuele-deployment">Actuele deployment</a></h1>
+<p>De basis van onze applicatie zijn de volgende manifest yamls:</p>
+<h2 id="applicatie"><a class="header" href="#applicatie">Applicatie</a></h2>
+<p>Aangezien we deze applicatie via ArgoCD deployen hebben wij natuurlijk een app.yaml:</p>
+<pre><code>apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: sdomain=delsynn/sdo:latest
+    argocd-image-updater.argoproj.io/sdomain.update-strategy: digest
+    argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/write-back-method: git
+  name: sdomain
+  namespace: argo
+spec:
+  destination:
+    namespace: sdomain
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://github.com/Cloud-Computing-2324/evaluation-smoothdevoperators.git
+    path: overlays/main
+    targetRevision: HEAD
+  info:
+    - name: 'sdomain'
+      value: 'https://sdomain.38.cc.ucll.cloud'
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+</code></pre>
+<p>Zoals men kan zien zijn er annotaties voor Argo Image Updater, hier komen wij later op terug.</p>
+<p>Bij de metadata kan men zien dat dit wordt toegekend aan de Argo namespace, zo kan ArgoCD deze applicatie terugvinden en daardoor zal deze dan ook zichtbaar zijn de ArgoCD GUI.</p>
+<p>Bij spec kan men zien waar men deze applicatie zal deployen, aangezien wij ge-authenticate zijn met de cluster via de kube_config file gebruiken wij dan ook het lokale adres : https://kubernetes.default.svc</p>
+<p>Voor de syncronisatie van ArgoCD te kunnen gebruiken moeten wij het pad naar onze repo hier ook zetten.</p>
+<p>En wij kiezen een url waarop wij deze site kunnen bezoeken.</p>
+<p>Als laatste dan nog, kunnen wij hier al zetten dat deze applicatie automatisch moet syncroniseren en prunen.</p>
+<h2 id="deployment"><a class="header" href="#deployment">Deployment</a></h2>
+<p>In de deployment yaml gaan wij dan de naam van de applicatie bepalen, welke image wij gebruiken (in ons geval dus onze eigen image) en hoeveel resources deze deployment mag gebruiken van de cluster:</p>
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sdomain
+  namespace: sdomain
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: sdomain
+  template:
+    metadata:
+      labels:
+        app: sdomain
+    spec:
+      containers:
+      - image: delsynn/sdo:latest
+        imagePullPolicy: Always
+        name: sdowebsite
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: &quot;128Mi&quot;
+            cpu: &quot;50m&quot;
+</code></pre>
+<p>We kunnen hier het aantal replicas bepalen en zoals u ziet steken we deze ook in de sdomain namespace, waarin wij alle resources hebben gestoken (ingress, service, podscaler, rollout, enz...).</p>
+<h2 id="ingress"><a class="header" href="#ingress">Ingress</a></h2>
+<p>Om onze website te kunnen bereiken moeten wij een ingress aanmaken:</p>
+<pre><code>apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sdomain-ingress
+  namespace: sdomain
+spec:
+  rules:
+  - host: sdomain.38.cc.ucll.cloud
+    http:
+      paths:
+      - backend:
+          service:
+            name: sdomain-service
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+</code></pre>
+<p>Hier bepalen wij nogmaals de url waarop deze website bereikbaar is en de achterliggende service naar welke de binnenkomende trafiek zal verstuurd worden.</p>
+<p>Het &quot;path&quot; zal dan weer bepalen waar op de site men terecht komt.</p>
+<h2 id="service"><a class="header" href="#service">Service</a></h2>
+<p>Zoals al vermeld zal de binnenkomende trafiek verstuurd worden naar de service van de applicatie en deze stuurt de trafiek dan door naar de applicatie zelf:</p>
+<pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: sdomain-service
+  namespace: sdomain
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: sdomain
+</code></pre>
+<p>Deze gaat bepalen welke poorten gaan gebruikt worden, aangezien het over een nginx website gaat gebruiken we dus poort 80 en binden deze ook aan gewoon poort 80.</p>
+<p>Met deze yaml bestanden hebben wij de basis setup.</p>
+<p>Aangezien wij deze deployen op ArgoCD zullen veranderingen aan deze bestanden automatisch gesynced worden wanneer Argo hier veranderingen aan ziet in onze repository.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="advanced-gitops-1"><a class="header" href="#advanced-gitops-1">Advanced GitOps</a></h1>
+<p>In de hoofdopdracht werd er ook gevraagd om nog wat andere resources te deployen:</p>
+<h2 id="argo-rollouts"><a class="header" href="#argo-rollouts">Argo Rollouts</a></h2>
+<p>Argo Rollouts is een Kubernetes controller en een set van CRDs die de mogelijkheid geven om geavanceerde deployments uit te voeren.</p>
+<p>Het kan dan gaan over blauw-groene deployments of canary deployments.</p>
+<p>Dit vereiste niet zoveel extra werk om werkende te krijgen maar vereise wel een extra installatie.</p>
+<p>Hoe deze installatie moet gebeuren vonden wij terug op de officïele site van <a href="https://argo-rollouts.readthedocs.io/en/stable/installation/">ArgoCD</a>.</p>
+<p>Daar wordt uitgelegd dat om de Argo Rollouts controller te installeren wij de volgende commando's moeten uitvoeren in onze cluster:</p>
+<pre><code>$ kubectl create namespace argo-rollouts
+$ kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+</code></pre>
+<p>Hiermee creëren wij een nieuwe namespace voor Argo Rollouts waar de Argo Rollouts controller zal lopen en voeren we de installatie van deze controller uit.</p>
+<p>Dan moeten wij een rollout en een service voor de rollout creëren, wij deden dit aan de hand van de voorbeelden op de officiële website van ArgoCD zijn &quot;getting started&quot; <a href="https://argo-rollouts.readthedocs.io/en/stable/getting-started/">sectie</a>.</p>
+<p>Onze yamls zien er als volgt uit beginnende met de canary rollout:</p>
+<pre><code>apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: sdomain-rollout
+  namespace: sdomain
+spec:
+  selector:
+    matchLabels:
+      app: sdomain
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: sdomain
+    spec:
+      containers:
+      - name: rollout
+        image: delsynn/sdo:latest
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        resources:
+          requests:
+            memory: 32Mi
+            cpu: 5m
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: {}
+      - setWeight: 40
+      - pause: {duration: 10}
+      - setWeight: 60
+      - pause: {duration: 10}
+      - setWeight: 80
+      - pause: {duration: 10}
+      - setWeight: 100
+</code></pre>
+<p>En dan nog de rollout sevice:</p>
+<pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: sdomain-rolloutservice
+  namespace: sdomain
+spec:
+  ports:
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app: sdomain
+</code></pre>
+<p>Men kan dan best de Kubectl pluging voor Argo Rollouts installeren want hiermee kan men bijvoorbeeld in geval de canary deployment deze dan controleren en bijvoorbeeld promoveren.</p>
+<p>Dit kan men doen door de volgende commando's uit te voeren op de cluster:</p>
+<pre><code>$ curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64
+$ chmod +x ./kubectl-argo-rollouts-linux-amd64
+$ sudo mv ./kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts
+</code></pre>
+<p>Men kan nakijen of de installatie correct is uitgevoerd met het commando:</p>
+<pre><code>$ kubectl argo rollouts version
+</code></pre>
+<p>In ons geval kunnen wij dan het volgende commando gebruiken om onze rollout te bekijken:</p>
+<pre><code>$ sudo kubectl argo rollouts get rollout sdomain-rollout -n sdomain --watch
+</code></pre>
+<p><img src="cicd/rollout.png" alt="Rollout" /></p>
+<p>Wanneer we deze rollout dan updaten met bijvoorbeeld een nieuwe image zal deze stapsgewijs de update strategie volgen.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="kustomize-and-helm-voor-argo-image-updater"><a class="header" href="#kustomize-and-helm-voor-argo-image-updater">Kustomize and Helm voor Argo Image Updater</a></h1>
+<p>Toen we wat verder in de opdracht kwamen stootten wij op het probleem dat onze docker images niet updaten wanneer wij de repository pushen met aanpassingen aan de website. Tiebe kwam op het idee om met Argo Image Updater te werken maar bij onderzoek bleek dat deze add-on voor Argo enkel werkt in samenwerking met het gebruik van Kustomize of Helm. Daarom hebben wij op de dev en qa branch gebruik gemaakt van Kustomize en Helm op de main branch.</p>
+<h2 id="kustomize"><a class="header" href="#kustomize">Kustomize</a></h2>
+<p>Voor Kustomize hebben wij een folder opbouw waarbij we een base folder hebben waarim de templates zitten voor de resources die we deployen op alle branches, dus deployment, service en ingress. Alsook een kustomization yaml waarin we naar deze templates gaan wijzen als resources:</p>
+<p><img src="cicd/basefolder.png" alt="Base Folder" /></p>
+<pre><code>apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+configurations:
+- rollout-transform.yaml
+
+resources:
+- deployment.yaml
+- ingress.yaml
+- service.yaml
+</code></pre>
+<p>Dan een overlays folder (bijvoorbeeld overlays/dev) waarin wij een ook een kustomization yaml hebben die gaat wijzen naar de base folder en naar de yaml waarin de deployment zit. Dit kan met meerdere yamls maar wij hebben gekozen om alle resources in een enkele yaml te steken (patchDeployment.yaml):</p>
+<p><img src="cicd/overlaysfolders.png" alt="Overlays Folders" /></p>
+<pre><code>apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+nameSuffix: dev
+
+resources:
+- ../../base
+
+patchesStrategicMerge:
+  - patchDeployment.yaml
+</code></pre>
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sdo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sdodev
+  template:
+    metadata:
+      labels:
+        app: sdodev
+    spec:
+      containers:
+      - name: sdowebsite
+        image: delsynn/sdo:dev
+        resources:
+          requests:
+            memory: &quot;128Mi&quot;
+            cpu: &quot;50m&quot;
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sdo
+spec:
+  rules:
+  - host: sdodev.38.cc.ucll.cloud
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: sdo
+            port:
+              number: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sdo
+spec:
+  selector:
+    app: sdodev
+</code></pre>
+<p>De kustomization van de overlay gaat dus naar de bases folder kijken om daar zijn templates te halen en gaat ook zeggen wat er moet veranderd worden in zijn eigen deployment (in dit geval nameSuffix).
+Wij hebben maar de basis uitgevoerd met zowel Kustomize en Helm. Gewoon om image updater werkende te krijgen. Dus men kan hier nog veel verder in gaan.</p>
+<p>Voor Helm hebben we in de overlays folder &quot;helm create main&quot; gedaan zodat we een helm applicatie aanmaken voor de &quot;main&quot; applicatie. Deze folder structuur ziet er als volgt uit:</p>
+<p><img src="cicd/helmfolders.png" alt="Helm Folder" /></p>
+<p>In de charts folders kan men andere helm charts waar de applicatie afhankelijk van is (dependencies). Hier zit momenteel niets in bij ons. </p>
+<p>En in de templates folders zitten de resources die men wilt deployen:</p>
+<p><img src="cicd/templates.png" alt="Templates Folder" /></p>
+<p>Zoals men kan zien zitten hier de extra yamls in die wij enkel op de main branch hebben gedeployed zoals de rollout/rolloutservice en de podscaler.</p>
+<p>Een voorbeeld van één van deze resources:</p>
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}
+    spec:
+      containers:
+      - image: delsynn/sdo:latest
+        imagePullPolicy: Always
+        name: sdowebsite
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: &quot;128Mi&quot;
+            cpu: &quot;50m&quot;
+</code></pre>
+<p>Helm werkt met values. Men kan bijvoorbeeld naam een template value geven die men dan in de values.yaml file gaat steken:</p>
+<pre><code>appName: sdomain
+namespace: sdomain
+</code></pre>
+<p>Bij het deployen vanuit de main folder met commando:</p>
+<pre><code>$ helm install main . --values values.yaml
+</code></pre>
+<p>Gaat Helm alle templates deployen en de values in deze templates invullen met de values die meegegeven worden met de values yaml. </p>
+<p>Het enige dat wij dan moeten doen om dit aan te passen voor andere branches is een andere values.yaml aanmaken waarin wij de values aanpassen naar wat nodig is voor die branch (bijvoorbeeld sdodev voor de naam).</p>
+<p>De naam &quot;main&quot; voor de applicatie was misschien geen goede keuze maar we waren niet van plan Helm te gebruiken op de andere branches.</p>
+<p>Dit omdat de werking met Argo Image Updater voor Helm ons nog moeilijkheden geeft en wij zijn er niet in geslaagd om dit werkende te krijgen. De image wordt geüpdate en er wordt een hash voor gemaakt maar dit wordt dan niet toegepast op de containers. Helaas hebben wij dit niet op tijd kunnen oplossen.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="argo-image-updater"><a class="header" href="#argo-image-updater">Argo Image Updater</a></h1>
+<p>Nu dat wij Kustomize hebben ingesteld (met Helm niet werkend gekregen) moeten we dus Argo Image Updater installeren. Hiervoor gebruikten wij de Helm installatie die wij terugvonden op <a href="https://artifacthub.io/packages/helm/argo/argocd-image-updater">Artifact Hub</a> met de volgende commando's:</p>
+<pre><code>$ helm repo add argo https://argoproj.github.io/argo-helm
+$ helm install argocd-image-updater argo/argocd-image-updater -n argo
+</code></pre>
+<p>Wij hadden voordien (een vorige les) Argo ook op deze manier geïnstalleerd dus dit herinnerde ons eraan om voor de verandering eens Helm te gebruiken.</p>
+<p>Vooraleer onze applicatie gebruik maakt van Argo Image Updater moesten wij enkele annotaties toevoegen aan onze app.yaml:</p>
+<pre><code>apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: sdodev=delsynn/sdo:dev
+    argocd-image-updater.argoproj.io/sdodev.update-strategy: digest
+    argocd-image-updater.argoproj.io/git-branch: dev
+  name: sdodev
+  namespace: argo
+spec:
+  destination:
+    namespace: sdodev
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://github.com/Cloud-Computing-2324/evaluation-smoothdevoperators.git
+    path: overlays/dev
+    targetRevision: dev
+  info:
+    - name: 'sdodev'
+      value: 'https://sdodev.38.cc.ucll.cloud'
+</code></pre>
+<p>Zoals men kan zien geeft het een alias aan de locatie van onze Docker Image repository, deze gebruiken we dan in de volgende annotatie om de manier van updaten in te stellen. En ten slot zeggen we nog over welke branch het gaat in onze repository alhoewel dit technisch niet nodig is.</p>
+<p>Met deze annotaties konden we zien in de image updater pod dat onze applicaties om de twee minuten worden nagekeken of zij up-to-date zijn met de Docker Hub repository:</p>
+<p><img src="cicd/imageupdaterlog.png" alt="Image Updater Log" /></p>
+<p>Zoals u kan zien wordt ook onze main branch gemonitored en geüpdate (zoals u kan zien in de parameters van de applicatie) maar niet toegepast op de containers:</p>
+<p><img src="cicd/sdomainparameters.png" alt="Sdomain Parameters" /></p>
+<p>We moeten deze applicatie verwijderen en terug toepassen vooraleer deze zijn containers zal updaten.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="keda-cronscaler"><a class="header" href="#keda-cronscaler">Keda Cronscaler</a></h1>
+<p>We hebben voor de main branch ook Keda geïnstalleerd, dit is een autoscaler die meer pods gaat genereren van onze applicatie aan de hand van bepaalde triggers.</p>
+<p>Voor Keda te installeren maakten wij weer gebruik van de Helm chart die we terugvonden op <a href="https://artifacthub.io/packages/helm/kedacore/keda">Artifact Hub</a> met de volgende commando's:</p>
+<pre><code>$ helm repo add kedacore https://kedacore.github.io/charts
+$ helm repo update
+
+$ kubectl create namespace keda
+$ helm install keda kedacore/keda --namespace keda --version 2.12.0
+</code></pre>
+<p>Wij hebben gekozen voor een simpele podscaler aan de hand van een cron schedule zoals men hieronder kan zien:</p>
+<pre><code>apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: sdomain-podscaler
+  namespace: sdomain
+spec:
+  scaleTargetRef:
+    name: sdomain
+  triggers:
+  - type: cron
+    metadata:
+      timezone: Europe/Brussels
+      start: 0 8 * * *
+      end: 0 20 * * *
+      desiredReplicas: &quot;2&quot;
+</code></pre>
+<p>Zoals u kan zien zal deze 2 replicas aanmaken van onze pods tussen 8 en 20 uur en dit dan weer terugscalen naar de originele hoeveelheid. Dit kan gebruikt worden om extra pods aan te maken tijdens de drukkere uren om de grotere hoeveelheid van trafiek aan te kunnen.</p>
+<p>Dit was voldoende om de Keda cronscaler te doen werken.</p>
+<p>De screenshot hieronder werd genomen om 12 uur en u ziet dat er 4 uur geleden een nieuwe pod werd aangemaakt om aan de cronscaler te voldoen, deze zal dan ook weer verdwijnen om 20:00 uur:</p>
+<p><img src="keda/cronscalerpod.png" alt="Cronscaler Pod" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="keda-cpu-scaler"><a class="header" href="#keda-cpu-scaler">Keda CPU-Scaler</a></h1>
+<p>Volgens de officiële website van Keda heeft de cpu scaler enkele vereisten:</p>
+<p><img src="keda/cpuscalerprerequisites.png" alt="CPU scaler vereisten" /></p>
+<p>Zoals men kan zien heeft deze scaler de Kubernetes Metrics Server nodig vooraleer deze kan werken, gelukkige was deze al standaard geïnstalleerd op onze cluster:</p>
+<p><img src="keda/metricsserver.png" alt="Metrics Server" /></p>
+<p>De tweede vereiste is dat onze deployments wel degelijk resources hebben die kunnen gemonitored worden door deze scaler, zoals u kan zien in onze deployment yaml, zijn deze ook aanwezig:</p>
+<p><img src="keda/deploymentresources.png" alt="Deployment Resources" /></p>
+<p>We hebben vrij weinig resources toegekent per pod aangezien het over een simpele website als deze gaat en enkel wij momenteel de website bezoeken.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="prometheus-en-metrics-scaler"><a class="header" href="#prometheus-en-metrics-scaler">Prometheus en metrics scaler</a></h1>
+<p>Tot slot was er nog de extra opdracht om een scaler te maken op basis van een metric die Prometheus scraped.</p>
+<p>We waren hieraan begonnen en hadden een Helm installatie gedaan van Prometheus met de commando's:</p>
+<pre><code>$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+$ helm install prometheus prometheus-community/prometheus --values values.yaml
+</code></pre>
+<p>Met een simpele values.yaml voor de helm installatie van Prometheus:</p>
+<pre><code>server:
+  ingress:
+    enabled: true
+    hosts:
+      - prometheus.38.cc.ucll.cloud
+  persistentVolume:
+    enabled: false
+
+additionalScrapeConfigs:
+  - job_name: 'nginx-exporter'
+    static_configs:
+      - targets: ['sdoqa.sdoqa.svc.cluster.local:9113']
+</code></pre>
+<p>Hierna was het dashboard van Prometheus al bereikbaar op prometheus.38.cc.ucll.cloud:</p>
+<p><img src="keda/prometheusdashboard.png" alt="Prometheus Dashboard" /></p>
+<p>We deden dan een deployment met een image van onze website en een image van nginx node exporter voor prometheus:</p>
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sdo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sdoqa
+  template:
+    metadata:
+      labels:
+        app: sdoqa
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9113'
+    spec:
+      containers:
+      - name: sdowebsite
+        image: delsynn/sdo:qa
+        resources:
+          requests:
+            memory: 32Mi
+            cpu: 5m
+      - name: nginx-exporter
+          image: 'nginx/nginx-prometheus-exporter:0.10.0'
+          args:
+            - '-nginx.scrape-uri=http://localhost/nginx_status'
+          resources:
+            limits:
+              memory: 128Mi
+              cpu: 50m
+          ports:
+            - containerPort: 9113
+</code></pre>
+<p>Dit zou een pod opstarten met zowel een container van onze website en een container met de nginx exporter.</p>
+<p>We stuitten echter op het probleem dat wij teveel pull requests aan het uitvoeren waren op docker hub:</p>
+<p><img src="keda/toomanyrequests.png" alt="Too many request" /></p>
+<p>Hierdoor startte de pod niet op en konden wij ook niet verder met testen.</p>
+<p>Aangezien dit redelijk dicht aan het einde van de vakantie was hebben dit dus niet meer kunnen oplossen.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="gateway-api-spec-2"><a class="header" href="#gateway-api-spec-2">Gateway API Spec</a></h1>
+<h2 id="instellen-van-een-http-route"><a class="header" href="#instellen-van-een-http-route">Instellen van een HTTP Route</a></h2>
+<p>Voor de Kubernetes Gateway API gebruikten wij de officiële documentatie op de volgende <a href="https://gateway-api.sigs.k8s.io/guides/">website</a> en voor de gateway controller gebruikten we Traefik die we terugvonden op de officiële <a href="https://doc.traefik.io/traefik/getting-started/install-traefik/">Traefik website</a>.</p>
+<p>Voor installatie, wat we van de Kubernetes Gateway API website moeten uitvoeren is de installatie van het experimentele kanaal met het volgende commando:</p>
+<pre><code>$ kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/experimental-install.yaml
+</code></pre>
+<p>Zij vertellen ons ook dat wij een Gateway Controller moeten installeren en hiervoor kozen wij Traefik.
+De installatie hiervan is wat ingewikkelder.</p>
+<p>We kunnen de installatie uitvoeren met een Helm chart, hier moeten we echter best de values.yaml file van Traefik zelf aan toevoegen en het gebruik van het experimentele kanaal aanzetten in deze values file:</p>
+<p><img src="gateway/kubernetesgatewayvalue.png" alt="Kubenetes Gateway Value" /></p>
+<p>Na deze values file aan te passen en op te slagen kunnen wij dan overgaan tot de installatie van de helm chart met de volgende commando's:</p>
+<pre><code>$ helm repo add traefik https://traefik.github.io/charts
+$ helm repo update
+$ helm install traefik traefik/traefik --version 26.0.0 -n traefik --values values.yaml
+</code></pre>
+<p>De namespace &quot;traefik&quot; hadden wij al op voorhand aangemaakt.</p>
+<p>Indien men dan wil gebruik maken van het Traefik Dashboard kan men de pod port forwarden met het volgende commando:</p>
+<pre><code>$ kubectl port-forward -n traefik traefik-54cb9c5568-p26ff 9000:9000
+</code></pre>
+<p>Hierna kunnen wij het dashboard bereiken op http://localhost:9000 :</p>
+<p><img src="gateway/traefikdashboard.png" alt="Traefik Dashboard" /></p>
+<p>Wanneer wij een http route aanmaken zal deze hier verschijnen en kunnen gemonitored worden, zoals die van de simpele website die ik voor dit onderdeel heb aangemaakt:</p>
+<p><img src="gateway/httproute.png" alt="HTTP Route" /></p>
+<p>Maar de installatieprocedure voor Traefik is nog niet afgelopen.</p>
+<p>We moeten nog 3 dingen toevoegen aan onze setup namelijk</p>
+<ul>
+<li>de Kubernetes Gateway API definitions</li>
+<li>de RBAC voor de Traefik custom resources</li>
+<li>en de nodige Gateway API resources, in ons geval een gateway.yaml en een httproute.yaml</li>
+</ul>
+<p>Alle 3 deze configuraties kan men terugvinden op de volgende pagina van de <a href="https://doc.traefik.io/traefik/reference/dynamic-configuration/kubernetes-gateway/">Traefik website</a>.</p>
+<p>We voegen deze toe aan onze cluster met het commando:</p>
+<pre><code>$ kubectl apply -f &quot;definitions.yaml&quot;
+$ kubectl apply -f &quot;rbac.yaml&quot;
+</code></pre>
+<p>Hierna is het enige dat wij nog moeten doen is dus een yaml aanmaken voor de nodige resources. Voor een simpele http route zijn dat een gateway:</p>
+<pre><code>apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: Gateway
+metadata:
+  name: website-gateway
+  namespace: default
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: web
+    port: 8000
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All
+</code></pre>
+<p>En de HTTP Route:</p>
+<pre><code>apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: HTTPRoute
+metadata:
+  name: website-http-route
+  namespace: default
+spec:
+  parentRefs:
+    - name: website-gateway
+  hostnames:
+    - &quot;website.47.cc.ucll.cloud&quot;  # Replace with your domain
+  rules:
+    - matches:
+        - path:
+            type: Exact
+            value: /
+      backendRefs:
+        - name: website-service
+          port: 80
+</code></pre>
+<p>We hebben dan nog wel geen website lopende dus hiervoor maken wij ook een deployment en service:</p>
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: website
+  template:
+    metadata:
+      labels:
+        app: website
+    spec:
+      containers:
+      - name: website
+        image: delsynn/website:1.7
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+</code></pre>
+<pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: website-service
+spec:
+  selector:
+    app: website
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+</code></pre>
+<p>Al deze resources voeren wij ook uit met de commando's:</p>
+<pre><code>$ kubectl apply -f websiteGateway.yaml
+$ kubectl apply -f websiteHttpRoute.yaml
+$ kubectl apply -f websiteDeployment.yaml
+$ kubectl apply -f websiteService.yaml
+</code></pre>
+<p>Nu is onze website bereikbaar op <a href="gateway/%5Bhttp://website.47.cc.ucll.cloud">http://website.47.cc.ucll.cloud</a>:</p>
+<p><img src="gateway/httprouteworks.png" alt="HTTP ROUTE WORKS" /></p>
+<p>SUCCES !</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="http-route-load-balancing"><a class="header" href="#http-route-load-balancing">HTTP Route Load Balancing</a></h1>
+<p>Nu om deze route als load balancer in te stellen moeten er twee dingen gedaan worden:</p>
+<ul>
+<li>Natuurlijk een tweede deployment creeëren van de website zodat er tussen deze twee deployments kan gebalanced worden.</li>
+<li>En de HTTPRoute zo aanpassen dat deze zal load balancen.</li>
+</ul>
+<p>Wij hebben dus de benamingen van de deployments heel duidelijk gemaakt zoals u hieronder kan zien.</p>
+<h2 id="more-traffic-website"><a class="header" href="#more-traffic-website">More Traffic Website:</a></h2>
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website-more-traffic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: website-more-traffic
+  template:
+    metadata:
+      labels:
+        app: website-more-traffic
+    spec:
+      containers:
+      - name: website
+        image: delsynn/website:1.7
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+</code></pre>
+<pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: website-more-traffic
+spec:
+  selector:
+    app: website-more-traffic
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+</code></pre>
+<h2 id="less-traffic-website"><a class="header" href="#less-traffic-website">Less Traffic Website:</a></h2>
+<pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website-less-traffic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: website-less-traffic
+  template:
+    metadata:
+      labels:
+        app: website-less-traffic
+    spec:
+      containers:
+      - name: website
+        image: delsynn/website:1.7
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+</code></pre>
+<pre><code>apiVersion: v1
+kind: Service
+metadata:
+  name: website-less-traffic
+spec:
+  selector:
+    app: website-less-traffic
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+</code></pre>
+<h2 id="aangepaste-httproute"><a class="header" href="#aangepaste-httproute">Aangepaste HTTPRoute:</a></h2>
+<pre><code>apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: HTTPRoute
+metadata:
+  name: website-http-route
+  namespace: default
+spec:
+  parentRefs:
+    - name: website-gateway
+  hostnames:
+    - &quot;website.47.cc.ucll.cloud&quot;  # Replace with your domain
+  rules:
+    - backendRefs:
+      - name: website-more-traffic
+        port: 80
+        weight: 70
+      - name: website-less-traffic
+        port: 80
+        weight: 30
+</code></pre>
+<p>Door het toekennen van een &quot;weight&quot; zal er bepaald worden welke deployment het meeste trafiek zal ontvangen. </p>
+<p>Zoals u hier kan zien zal 70% van de trafiek worden doorgestuurd naar de service van website-more-traffic en deze zal de trafiek dan doorsturen naar de website-more-traffic deployment.</p>
+<p>En 30% gaat dus naar de service van website-less-traffic die deze dan ook doorstuurt naar de website-less traffic deployment.</p>
+<h2 id="visualisatie-in-lens"><a class="header" href="#visualisatie-in-lens">Visualisatie in lens</a></h2>
+<p>Hieronder zal u de logs van beide pods kunnen zien en u zal zien dat inderdaad de website-less-traffic veel minder trafiek krijgt dan website-more-traffic pod.</p>
+<h3 id="website-more-traffic-pod"><a class="header" href="#website-more-traffic-pod">website-more-traffic pod:</a></h3>
+<p><img src="gateway/moretrafficpod.png" alt="More Traffic Pod" /></p>
+<h3 id="website-less-traffic-pod"><a class="header" href="#website-less-traffic-pod">website-less-traffic pod:</a></h3>
+<p><img src="gateway/lesstrafficpod.png" alt="Less Traffic Pod" /></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
