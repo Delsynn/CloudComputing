@@ -1,6 +1,7 @@
 # Summary
 
 [Introductie](intro.md)
+[Interpretatie](interpretatie.md)
 
 # CI/CD & Advanced GitOps
 - [Docker](cicd/docker.md)
