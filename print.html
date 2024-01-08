@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introductie</a></li><li class="chapter-item expanded affix "><a href="interpretatie.html">Interpretatie</a></li><li class="chapter-item expanded affix "><li class="part-title">CI/CD & Advanced GitOps</li><li class="chapter-item expanded "><a href="cicd/docker.html"><strong aria-hidden="true">1.</strong> Docker</a></li><li class="chapter-item expanded "><a href="cicd/deployment.html"><strong aria-hidden="true">2.</strong> Deployment</a></li><li class="chapter-item expanded "><a href="cicd/advanced.html"><strong aria-hidden="true">3.</strong> Advanced Gitops</a></li><li class="chapter-item expanded "><a href="cicd/kustomizeandhelm.html"><strong aria-hidden="true">4.</strong> Kustomize and Helm</a></li><li class="chapter-item expanded "><a href="cicd/argoimageupdater.html"><strong aria-hidden="true">5.</strong> Argo Image Updater</a></li><li class="chapter-item expanded affix "><li class="part-title">Autoscaling with Keda</li><li class="chapter-item expanded "><a href="keda/cronscaler.html"><strong aria-hidden="true">6.</strong> Cronscaler</a></li><li class="chapter-item expanded "><a href="keda/cpuscaler.html"><strong aria-hidden="true">7.</strong> Cpuscaler</a></li><li class="chapter-item expanded "><a href="keda/prometheus.html"><strong aria-hidden="true">8.</strong> Prometheus</a></li><li class="chapter-item expanded affix "><li class="part-title">Gateway API Spec</li><li class="chapter-item expanded "><a href="gateway/gateway.html"><strong aria-hidden="true">9.</strong> Gateway API Spec</a></li><li class="chapter-item expanded "><a href="gateway/loadbalancing.html"><strong aria-hidden="true">10.</strong> Load Balancing</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="intro.html">Introductie</a></li><li class="chapter-item expanded affix "><a href="interpretatie.html">Interpretatie</a></li><li class="chapter-item expanded affix "><li class="part-title">CI/CD & Advanced GitOps</li><li class="chapter-item expanded "><a href="cicd/docker.html"><strong aria-hidden="true">1.</strong> Docker</a></li><li class="chapter-item expanded "><a href="cicd/deployment.html"><strong aria-hidden="true">2.</strong> Deployment</a></li><li class="chapter-item expanded "><a href="cicd/advanced.html"><strong aria-hidden="true">3.</strong> Advanced Gitops</a></li><li class="chapter-item expanded "><a href="cicd/kustomizeandhelm.html"><strong aria-hidden="true">4.</strong> Kustomize and Helm</a></li><li class="chapter-item expanded "><a href="cicd/argoimageupdater.html"><strong aria-hidden="true">5.</strong> Argo Image Updater</a></li><li class="chapter-item expanded "><a href="cicd/renovate.html"><strong aria-hidden="true">6.</strong> Renovatebot</a></li><li class="chapter-item expanded affix "><li class="part-title">Autoscaling with Keda</li><li class="chapter-item expanded "><a href="keda/cronscaler.html"><strong aria-hidden="true">7.</strong> Cronscaler</a></li><li class="chapter-item expanded "><a href="keda/cpuscaler.html"><strong aria-hidden="true">8.</strong> Cpuscaler</a></li><li class="chapter-item expanded "><a href="keda/prometheus.html"><strong aria-hidden="true">9.</strong> Prometheus</a></li><li class="chapter-item expanded affix "><li class="part-title">Gateway API Spec</li><li class="chapter-item expanded "><a href="gateway/gateway.html"><strong aria-hidden="true">10.</strong> Gateway API Spec</a></li><li class="chapter-item expanded "><a href="gateway/loadbalancing.html"><strong aria-hidden="true">11.</strong> Load Balancing</a></li><li class="chapter-item expanded "><a href="gateway/tcpandudproute.html"><strong aria-hidden="true">12.</strong> TCP and UDP Route</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -635,6 +635,19 @@ spec:
 <p>Zoals u kan zien wordt ook onze main branch gemonitored en geüpdate (zoals u kan zien in de parameters van de applicatie) maar niet toegepast op de containers:</p>
 <p><img src="cicd/sdomainparameters.png" alt="Sdomain Parameters" /></p>
 <p>We moeten deze applicatie verwijderen en terug toepassen vooraleer deze zijn containers zal updaten.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="renovatebot-1"><a class="header" href="#renovatebot-1">Renovatebot</a></h1>
+<p>De installatie van renovatebot ging vrij simpel.</p>
+<p>Men gaat naar de settings in de repository.</p>
+<p><img src="cicd/githubapps.png" alt="Renovatebot" /></p>
+<p>Daar kan men dan Renovate als app kiezen, hierna zal Renovate zelf een pull request maken voor de configuratie van zichzelf.</p>
+<p><img src="cicd/renovatepullrequest.png" alt="Renovate Pull Request" /></p>
+<p>Wanneer men deze pull request dan bekijkt zal er in uitgelegd staan welke dependancies in uw repository Renovate dan zal monitoren en hoe frequent het dit zal doen.</p>
+<p><img src="cicd/renovateconfig.png" alt="Renovate Config" /></p>
+<p>Wanneer men deze pull request dan merged zal de configuratiefile voor renovate worden aangemaakt in de root van de repository. Vanaf dan zal Renovatebot de dependancies in de repository gaan monitoren met de frequentie die is ingesteld (standaard om de 2 uur).</p>
+<p><img src="cicd/mergepull.png" alt="Merge Pull Request" /></p>
+<p><img src="cicd/basicrenovateconfig.png" alt="Basic Renovate Config" /></p>
+<p>Men kan ook de developer dashboard van Renovate gebruiken op de <a href="https://developer.mend.io/">mend.io website</a>. Hier zal men dan een oplijsting zien van alle &quot;Renovates&quot; dat er gebeurd zijn op de repository.</p>
+<p><img src="cicd/menddashboard.png" alt="Mend Dashboard" /></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="keda-cronscaler"><a class="header" href="#keda-cronscaler">Keda Cronscaler</a></h1>
 <p>We hebben voor de main branch ook Keda geïnstalleerd, dit is een autoscaler die meer pods gaat genereren van onze applicatie aan de hand van bepaalde triggers.</p>
 <p>Voor Keda te installeren maakten wij weer gebruik van de Helm chart die we terugvonden op <a href="https://artifacthub.io/packages/helm/kedacore/keda">Artifact Hub</a> met de volgende commando's:</p>
@@ -735,7 +748,7 @@ spec:
 <p>We stuitten echter op het probleem dat wij teveel pull requests aan het uitvoeren waren op docker hub:</p>
 <p><img src="keda/toomanyrequests.png" alt="Too many request" /></p>
 <p>Hierdoor startte de pod niet op en konden wij ook niet verder met testen.</p>
-<p>Aangezien dit redelijk dicht aan het einde van de vakantie was hebben dit dus niet meer kunnen oplossen.</p>
+<p>Aangezien dit redelijk dicht aan het einde van de vakantie was hebben we dit dus niet meer kunnen oplossen.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="gateway-api-spec-2"><a class="header" href="#gateway-api-spec-2">Gateway API Spec</a></h1>
 <h2 id="instellen-van-een-http-route"><a class="header" href="#instellen-van-een-http-route">Instellen van een HTTP Route</a></h2>
 <p>Voor de Kubernetes Gateway API gebruikten wij de officiële documentatie op de volgende <a href="https://gateway-api.sigs.k8s.io/guides/">website</a> en voor de gateway controller gebruikten we Traefik die we terugvonden op de officiële <a href="https://doc.traefik.io/traefik/getting-started/install-traefik/">Traefik website</a>.</p>
@@ -954,6 +967,12 @@ spec:
 <p><img src="gateway/moretrafficpod.png" alt="More Traffic Pod" /></p>
 <h3 id="website-less-traffic-pod"><a class="header" href="#website-less-traffic-pod">website-less-traffic pod:</a></h3>
 <p><img src="gateway/lesstrafficpod.png" alt="Less Traffic Pod" /></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tcp-route-and-udp-route"><a class="header" href="#tcp-route-and-udp-route">TCP Route and UDP Route</a></h1>
+<p>Een tcp route heb ik nog proberen aanmaken maar na tellen malen te proberen ben ik er niet in geslaagd.</p>
+<p>Ik had gemerkt, bij het inspecteren van de gateway, dat er listeners zijn voor de verschillende mogelijke routes. Er was enkel een listener voor de HTTP Route en ik heb niet gevonden waar ik deze routes moet activeren, indien dit met een aangepaste value in de values.yaml file moet van Traefik of nog ergens anders.</p>
+<p>Hetzelfde voor de UDP Route, alhoewel ik niet heb teruggevonden of Traefik wel UDP Routes mogelijk maakt.</p>
+<p>De documentatie die ik gevonden had over TCP routes heb ik overgemaakt aan mijn collega's en aangezien zij hun presentatie wat later als mij zullen uitvoeren gaan zij nog proberen om deze routes in te stellen.</p>
+<p>Echter ben ik al heel lang bezig met deze opdracht en ik vond niet dat ik hier nog verder iets aan kon bijdragen in korte tijd.</p>
 
                     </main>
 

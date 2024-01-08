@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Argo Image Updater</title>
+        <title>TCP and UDP Route</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../intro.html">Introductie</a></li><li class="chapter-item expanded affix "><a href="../interpretatie.html">Interpretatie</a></li><li class="chapter-item expanded affix "><li class="part-title">CI/CD & Advanced GitOps</li><li class="chapter-item expanded "><a href="../cicd/docker.html"><strong aria-hidden="true">1.</strong> Docker</a></li><li class="chapter-item expanded "><a href="../cicd/deployment.html"><strong aria-hidden="true">2.</strong> Deployment</a></li><li class="chapter-item expanded "><a href="../cicd/advanced.html"><strong aria-hidden="true">3.</strong> Advanced Gitops</a></li><li class="chapter-item expanded "><a href="../cicd/kustomizeandhelm.html"><strong aria-hidden="true">4.</strong> Kustomize and Helm</a></li><li class="chapter-item expanded "><a href="../cicd/argoimageupdater.html" class="active"><strong aria-hidden="true">5.</strong> Argo Image Updater</a></li><li class="chapter-item expanded "><a href="../cicd/renovate.html"><strong aria-hidden="true">6.</strong> Renovatebot</a></li><li class="chapter-item expanded affix "><li class="part-title">Autoscaling with Keda</li><li class="chapter-item expanded "><a href="../keda/cronscaler.html"><strong aria-hidden="true">7.</strong> Cronscaler</a></li><li class="chapter-item expanded "><a href="../keda/cpuscaler.html"><strong aria-hidden="true">8.</strong> Cpuscaler</a></li><li class="chapter-item expanded "><a href="../keda/prometheus.html"><strong aria-hidden="true">9.</strong> Prometheus</a></li><li class="chapter-item expanded affix "><li class="part-title">Gateway API Spec</li><li class="chapter-item expanded "><a href="../gateway/gateway.html"><strong aria-hidden="true">10.</strong> Gateway API Spec</a></li><li class="chapter-item expanded "><a href="../gateway/loadbalancing.html"><strong aria-hidden="true">11.</strong> Load Balancing</a></li><li class="chapter-item expanded "><a href="../gateway/tcpandudproute.html"><strong aria-hidden="true">12.</strong> TCP and UDP Route</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../intro.html">Introductie</a></li><li class="chapter-item expanded affix "><a href="../interpretatie.html">Interpretatie</a></li><li class="chapter-item expanded affix "><li class="part-title">CI/CD & Advanced GitOps</li><li class="chapter-item expanded "><a href="../cicd/docker.html"><strong aria-hidden="true">1.</strong> Docker</a></li><li class="chapter-item expanded "><a href="../cicd/deployment.html"><strong aria-hidden="true">2.</strong> Deployment</a></li><li class="chapter-item expanded "><a href="../cicd/advanced.html"><strong aria-hidden="true">3.</strong> Advanced Gitops</a></li><li class="chapter-item expanded "><a href="../cicd/kustomizeandhelm.html"><strong aria-hidden="true">4.</strong> Kustomize and Helm</a></li><li class="chapter-item expanded "><a href="../cicd/argoimageupdater.html"><strong aria-hidden="true">5.</strong> Argo Image Updater</a></li><li class="chapter-item expanded "><a href="../cicd/renovate.html"><strong aria-hidden="true">6.</strong> Renovatebot</a></li><li class="chapter-item expanded affix "><li class="part-title">Autoscaling with Keda</li><li class="chapter-item expanded "><a href="../keda/cronscaler.html"><strong aria-hidden="true">7.</strong> Cronscaler</a></li><li class="chapter-item expanded "><a href="../keda/cpuscaler.html"><strong aria-hidden="true">8.</strong> Cpuscaler</a></li><li class="chapter-item expanded "><a href="../keda/prometheus.html"><strong aria-hidden="true">9.</strong> Prometheus</a></li><li class="chapter-item expanded affix "><li class="part-title">Gateway API Spec</li><li class="chapter-item expanded "><a href="../gateway/gateway.html"><strong aria-hidden="true">10.</strong> Gateway API Spec</a></li><li class="chapter-item expanded "><a href="../gateway/loadbalancing.html"><strong aria-hidden="true">11.</strong> Load Balancing</a></li><li class="chapter-item expanded "><a href="../gateway/tcpandudproute.html" class="active"><strong aria-hidden="true">12.</strong> TCP and UDP Route</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -173,53 +173,21 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="argo-image-updater"><a class="header" href="#argo-image-updater">Argo Image Updater</a></h1>
-<p>Nu dat wij Kustomize hebben ingesteld (met Helm niet werkend gekregen) moeten we dus Argo Image Updater installeren. Hiervoor gebruikten wij de Helm installatie die wij terugvonden op <a href="https://artifacthub.io/packages/helm/argo/argocd-image-updater">Artifact Hub</a> met de volgende commando's:</p>
-<pre><code>$ helm repo add argo https://argoproj.github.io/argo-helm
-$ helm install argocd-image-updater argo/argocd-image-updater -n argo
-</code></pre>
-<p>Wij hadden voordien (een vorige les) Argo ook op deze manier geïnstalleerd dus dit herinnerde ons eraan om voor de verandering eens Helm te gebruiken.</p>
-<p>Vooraleer onze applicatie gebruik maakt van Argo Image Updater moesten wij enkele annotaties toevoegen aan onze app.yaml:</p>
-<pre><code>apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  annotations:
-    argocd-image-updater.argoproj.io/image-list: sdodev=delsynn/sdo:dev
-    argocd-image-updater.argoproj.io/sdodev.update-strategy: digest
-    argocd-image-updater.argoproj.io/git-branch: dev
-  name: sdodev
-  namespace: argo
-spec:
-  destination:
-    namespace: sdodev
-    server: https://kubernetes.default.svc
-  project: default
-  source:
-    repoURL: https://github.com/Cloud-Computing-2324/evaluation-smoothdevoperators.git
-    path: overlays/dev
-    targetRevision: dev
-  info:
-    - name: 'sdodev'
-      value: 'https://sdodev.38.cc.ucll.cloud'
-</code></pre>
-<p>Zoals men kan zien geeft het een alias aan de locatie van onze Docker Image repository, deze gebruiken we dan in de volgende annotatie om de manier van updaten in te stellen. En ten slot zeggen we nog over welke branch het gaat in onze repository alhoewel dit technisch niet nodig is.</p>
-<p>Met deze annotaties konden we zien in de image updater pod dat onze applicaties om de twee minuten worden nagekeken of zij up-to-date zijn met de Docker Hub repository:</p>
-<p><img src="imageupdaterlog.png" alt="Image Updater Log" /></p>
-<p>Zoals u kan zien wordt ook onze main branch gemonitored en geüpdate (zoals u kan zien in de parameters van de applicatie) maar niet toegepast op de containers:</p>
-<p><img src="sdomainparameters.png" alt="Sdomain Parameters" /></p>
-<p>We moeten deze applicatie verwijderen en terug toepassen vooraleer deze zijn containers zal updaten.</p>
+                        <h1 id="tcp-route-and-udp-route"><a class="header" href="#tcp-route-and-udp-route">TCP Route and UDP Route</a></h1>
+<p>Een tcp route heb ik nog proberen aanmaken maar na tellen malen te proberen ben ik er niet in geslaagd.</p>
+<p>Ik had gemerkt, bij het inspecteren van de gateway, dat er listeners zijn voor de verschillende mogelijke routes. Er was enkel een listener voor de HTTP Route en ik heb niet gevonden waar ik deze routes moet activeren, indien dit met een aangepaste value in de values.yaml file moet van Traefik of nog ergens anders.</p>
+<p>Hetzelfde voor de UDP Route, alhoewel ik niet heb teruggevonden of Traefik wel UDP Routes mogelijk maakt.</p>
+<p>De documentatie die ik gevonden had over TCP routes heb ik overgemaakt aan mijn collega's en aangezien zij hun presentatie wat later als mij zullen uitvoeren gaan zij nog proberen om deze routes in te stellen.</p>
+<p>Echter ben ik al heel lang bezig met deze opdracht en ik vond niet dat ik hier nog verder iets aan kon bijdragen in korte tijd.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../cicd/kustomizeandhelm.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../gateway/loadbalancing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../cicd/renovate.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
-                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -227,13 +195,10 @@ spec:
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../cicd/kustomizeandhelm.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../gateway/loadbalancing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../cicd/renovate.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
-                    </a>
             </nav>
 
         </div>
