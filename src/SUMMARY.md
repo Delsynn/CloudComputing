@@ -9,6 +9,7 @@
 - [Advanced Gitops](cicd/advanced.md)
 - [Kustomize and Helm](cicd/kustomizeandhelm.md)
 - [Argo Image Updater](cicd/argoimageupdater.md)
+- [Renovatebot](cicd/renovate.md)
 
 # Autoscaling with Keda
 - [Cronscaler](keda/cronscaler.md)
@@ -18,3 +19,4 @@
 # Gateway API Spec
 - [Gateway API Spec](gateway/gateway.md)
 - [Load Balancing](gateway/loadbalancing.md)
+- [TCP and UDP Route](gateway/tcpandudproute.md)

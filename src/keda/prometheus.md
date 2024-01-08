@@ -75,5 +75,5 @@ We stuitten echter op het probleem dat wij teveel pull requests aan het uitvoere
 
 Hierdoor startte de pod niet op en konden wij ook niet verder met testen.
 
-Aangezien dit redelijk dicht aan het einde van de vakantie was hebben dit dus niet meer kunnen oplossen.
+Aangezien dit redelijk dicht aan het einde van de vakantie was hebben we dit dus niet meer kunnen oplossen.
 
